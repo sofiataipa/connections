@@ -8,17 +8,21 @@ Inspired by the Connections paintings by Nuno Barreto
 const NUM_SPRINKLES = 80;
 const NUM_GRID = 4;
 const NUM_VERTEX = 5;
+let sprinkle_stroke;
 
 let spc;
+let last_spc;
 
 let colorPallete;
 let angles = [0, 90, 180, 270];
 
-let sprinkles = [];
+let sprinkles;
 let doors = [];
 
+const SIZE = 0.9; // size of the canvas of the screen (0 to 1)
+
 function setup() {
-  createCanvas(800, 800);
+  updateCanvas(); // draws canvas
   
   angleMode(DEGREES);
   strokeCap(SQUARE);
@@ -35,7 +39,17 @@ function setup() {
 
   // Spacing of each square of the grid
   spc = width / NUM_GRID;
+  last_spc = spc;
 
+  generateSprinkles();
+
+  // reset all the doors to true (== door is visible)
+  resetDoors();
+}
+
+function generateSprinkles()
+{
+  sprinkles = [];
   // Creation of all the arrays of "sprinkles"
   for(let row = 0; row < NUM_GRID; row++) {
     sprinkles[row] = [];
@@ -46,9 +60,6 @@ function setup() {
       createSprinkles(xCenter, yCenter, row, col);
     }
   }
-
-  // reset all the doors to true (== door is visible)
-  resetDoors();
 }
 
 function draw() {
@@ -217,7 +228,7 @@ class Sprinkle {
    */
   draw() {
     noFill();
-    strokeWeight(2.5);
+    strokeWeight(sprinkle_stroke);
     stroke(this.color);
 
     push();
@@ -233,4 +244,29 @@ class Sprinkle {
     endShape();
     pop();
   }
+}
+
+function updateCanvas() 
+{
+  if(windowHeight < windowWidth)
+    cnv = createCanvas(windowHeight*SIZE, windowHeight*SIZE);
+  else
+    cnv = createCanvas(windowWidth*SIZE, windowWidth*SIZE);
+  
+  sprinkle_stroke = width/300
+  let x = (windowWidth - width) / 2;
+  let y = (windowHeight - height) / 2;
+
+  cnv.position(x, y);
+}
+
+function windowResized() { 
+  // Spacing of each square of the grid
+  spc = width / NUM_GRID;
+  if(last_spc != spc)
+  {
+    generateSprinkles();
+  }
+  last_spc = spc;
+  updateCanvas(); 
 }
