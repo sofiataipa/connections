@@ -6,3 +6,16 @@ html, body {
 canvas {
   display: block;
 }
+
+nav
+{
+    padding:10px 3%;
+    letter-spacing: normal;
+    font-family: Verdana, sans-serif;
+    
+}
+
+nav a:visited, nav a 
+{
+  color: whitesmoke;
+}
